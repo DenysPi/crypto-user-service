@@ -14,16 +14,17 @@
             <div class="circle circle-one"></div>
             <div class="form-container">
                 
-                <h1 class="opacity">LOGIN</h1>
+                <h1 class="opacity">REGISTER</h1>
                 <form>
+                    <input id="username" type="text" placeholder="USERNAME" />
                     <input id="email" type="text" placeholder="EMAIL" />
                     <input id="password" type="password" placeholder="PASSWORD" />
                     <button class="opacity">SUBMIT</button>
                 </form>
                 <p id="message"></p>
                 <div class="register-forget opacity">
-                    <a id="register">REGISTER</a>
-                    <a id="recoverPass">FORGOT PASSWORD</a>
+                    <a href="">LOGIN</a>
+                    <a href="">FORGOT PASSWORD</a>
                 </div>
             </div>
             <div class="circle circle-two"></div>
@@ -33,47 +34,49 @@
         <div class="theme-btn-container"></div>
 
     </section>
+
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const form = document.querySelector("form"); 
-            const register = document.getElementById('register')
             const messageElement = document.getElementById("message");
     
             form.addEventListener("submit", async function (event) {
-                event.preventDefault(); // Prevent default form submission
-    
+                event.preventDefault(); 
+                
+                const username = document.getElementById("username").value.trim();
                 const email = document.getElementById("email").value.trim();
                 const password = document.getElementById("password").value.trim();
-    
-                // Basic validation
-                if (!email || !password) {
+
+
+                if (!email || !password ||!username) {
                     messageElement.textContent = "Please fill in all fields!";
                     messageElement.style.color = "red";
                     return;
                 }
-    
-                const userLogin = {
+
+                const userCreate = {
+                    username: username,
                     email: email,
                     password: password
-                };
-    
+                }
+
                 try {
-                    const response = await fetch(`${window.location.origin}/login`, {
+                    const response = await fetch(`${window.location.origin}/register`, {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"
                         },
-                        body: JSON.stringify(userLogin)
+                        body: JSON.stringify(userCreate)
                     });
     
                     const result = await response.json();
     
                     if (response.ok) {
-                        messageElement.textContent = "Login successful!";
+                        messageElement.textContent = "Register successful!";
                         messageElement.style.color = "green";
                         form.reset(); // Reset form on success
                     } else {
-                        messageElement.textContent = result.message || "Login failed!";
+                        messageElement.textContent = result.message || "Register failed!";
                         messageElement.style.color = "red";
                     }
     
@@ -83,9 +86,7 @@
                     messageElement.style.color = "red";
                 }
             });
-            register.addEventListener('click', function () {
-                window.location.href = `${window.location.origin}/register`; 
-            });
         });
     </script>
+
 </body>

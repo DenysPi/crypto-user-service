@@ -9,7 +9,8 @@ from fastapi.responses import HTMLResponse
 
 router = APIRouter()
 
-templates = Jinja2Templates(directory="crypto_user_service/frontend/templates")
+templates = Jinja2Templates(directory="app/frontend/templates/")
+print(templates)
 
 @router.post("/register", response_model=UserResponse)
 def register(user_data: UserCreate, db: Session = Depends(get_db)):
@@ -33,6 +34,11 @@ def register(user_data: UserCreate, db: Session = Depends(get_db)):
     except Exception as ex:
         db.rollback()
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(ex))
+
+@router.get('/register', response_class=HTMLResponse)
+def register_page(request: Request):
+    return templates.TemplateResponse("index2.html", {"request": request})
+
 
 @router.get("/login", response_class=HTMLResponse)
 def login_page(request: Request):
